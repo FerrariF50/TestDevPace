@@ -8,6 +8,6 @@ namespace Customer.BAL.Interfaces
         Task<int> AddAsync(CustomerRequestDto obj);
         Task DeleteAsync(int id);
         Task UpdateAsync(CustomerRequestDto obj);
-        Task GetAsync(int id);
+        Task GetAsync(int id); 
     }
 }
