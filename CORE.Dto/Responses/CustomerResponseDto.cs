@@ -1,6 +1,8 @@
-﻿namespace CORE.Dto.Responses
+﻿using System.Collections.Generic;
+
+namespace CORE.Dto.Responses
 {
-    public class CustomerResponse : BaseRequestResponse<CustomerResponse>
+    public class CustomerDtoResponse : BaseRequestResponse<IEnumerable<CustomerDtoResponse>>
     {
     }
 }

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DevPace.CORE.DAL.Models
+﻿namespace CORE.DAL.Models
 {
-    public class Customer
+    public partial class Customer
     {
-        public int CustomersId { get; set; }
+        public int Customerid { get; set; }
         public string Name { get; set; }
-        public string CompanyName { get; set; }
+        public string Companyname { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
     }

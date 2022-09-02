@@ -1,4 +1,6 @@
 ﻿using CORE.Dto.Requests;
+using CORE.Dto.Responses;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Customer.BAL.Interfaces
@@ -7,7 +9,8 @@ namespace Customer.BAL.Interfaces
     {
         Task<int> AddAsync(CustomerRequestDto obj);
         Task DeleteAsync(int id);
-        Task UpdateAsync(CustomerRequestDto obj);
-        Task GetAsync(int id); 
+        Task<int> UpdateAsync(CustomerRequestDto obj);
+        Task<CustomerResponse> GetAsync(int id);
+        Task<IEnumerable<CustomerDtoResponse>> GetAllAsync();
     }
 }

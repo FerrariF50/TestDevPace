@@ -1,4 +1,6 @@
-﻿using CORE.Dto.Responses;
+﻿using CORE.Dto.Requests;
+using CORE.Dto.Responses;
+using Customer.BAL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,88 +14,103 @@ namespace Customer.WebApi.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        [HttpGet("[Action]/{userId}")]
+        private readonly ICustomerAppService _customerAppSrv;
+
+        public CustomerController(ICustomerAppService customerAppSrv)
+        {
+            _customerAppSrv = customerAppSrv;
+        }
+
+        [HttpPost("[Action]/{customerId}")]
         [ProducesResponseType(typeof(CustomerResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(CustomerResponse), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<CustomerResponse>> Get(int Customer)
+        public async Task<ActionResult<CustomerResponse>> Get(int customerId)
         {
             try
             {
-                var result = await _appService.GetChargeInfoAsync(userId);
-                var response = new TrooperChargeInfoResponse { Body = result };
+                var result = await _customerAppSrv.GetAsync(customerId);
+                var response = new CustomerResponse { Body = result };
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-                var response = new TrooperChargeInfoResponse
+                var response = new CustomerDtoResponse { HasError = true, Error = (ex.Message + ", Inner:" + ex.InnerException) };
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+            }
+        }
+
+        [HttpGet("[Action]/{customerId}")]
+        [ProducesResponseType(typeof(CustomerDtoResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CustomerDtoResponse), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<CustomerDtoResponse>> GetAll()
+        {
+            try
+            {
+                var result = await _customerAppSrv.GetAllAsync();
+                var response = new CustomerDtoResponse { Body = result };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                var response = new CustomerDtoResponse { HasError = true, Error = (ex.Message + ", Inner:" + ex.InnerException) };
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+            }
+        }
+
+        [HttpPost("[Action]")]
+        [ProducesResponseType(typeof(IntResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IntResponse), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<IntResponse>> Add([FromBody] CustomerRequestDto dto)
+        {
+            try
+            {
+                var result = await _customerAppSrv.AddAsync(dto);
+                var response = new IntResponse { Body = result };
+                return response;
+            }
+            catch (Exception ex)
+            {
+                var response = new IntResponse
                 { HasError = true, Error = (ex.Message + ", Inner:" + ex.InnerException) };
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
             }
         }
 
-        [HttpGet("[Action]/{userId}")]
-        [ProducesResponseType(typeof(TrooperResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(TrooperResponse), StatusCodes.Status500InternalServerError)]
+        [HttpDelete("[Action]/{customerId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<BoolResponse>> ChargeAllTroopersBySparks(int userId)
+        public async Task<ActionResult> Delete(int customerId)
         {
-            _logger.LogInformation($"ChargeAllTroopersBySparks: {userId}");
             try
             {
-                var result = await _appService.ChargeAllTroopersBySparksAsync(userId);
-                var response = new BoolResponse { Body = result };
-                return response;
+                await _customerAppSrv.DeleteAsync(customerId);
+                return Ok();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-                var response = new BoolResponse
-                { HasError = true, Error = (ex.Message + ", Inner:" + ex.InnerException) };
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
-        [HttpGet("[Action]/{userId}/{trooperId}")]
-        [ProducesResponseType(typeof(TrooperResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(TrooperResponse), StatusCodes.Status500InternalServerError)]
+        [HttpPut("[Action]")]
+        [ProducesResponseType(typeof(IntResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IntResponse), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<BoolResponse>> ChargeTrooperBySparks(int userId, int trooperId)
+        public async Task<ActionResult<IntResponse>> Update([FromBody] CustomerRequestDto dto)
         {
-            _logger.LogInformation($"ChargeTrooperBySparks: {userId} , {trooperId}");
             try
             {
-                var result = await _appService.ChargeTrooperBySparksAsync(userId, trooperId);
-                var response = new BoolResponse { Body = result };
+                var result = await _customerAppSrv.UpdateAsync(dto);
+                var response = new IntResponse { Body = result };
                 return response;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-                var response = new BoolResponse
-                { HasError = true, Error = (ex.Message + ", Inner:" + ex.InnerException) };
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
-            }
-        }
-
-        [HttpGet("[Action]/{userId}")]
-        [ProducesResponseType(typeof(TrooperResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(TrooperResponse), StatusCodes.Status500InternalServerError)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<BoolResponse>> ChargeAllTroopersBySparkAndXoil(int userId)
-        {
-            _logger.LogInformation($"ChargeAllTroopersBySparkAndXoil: {userId}");
-            try
-            {
-                var result = await _appService.ChargeAllTroopersBySparkAndXoil(userId);
-                var response = new BoolResponse { Body = result };
-                return response;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                var response = new BoolResponse
+                var response = new IntResponse
                 { HasError = true, Error = (ex.Message + ", Inner:" + ex.InnerException) };
                 return StatusCode(StatusCodes.Status500InternalServerError, response);
             }

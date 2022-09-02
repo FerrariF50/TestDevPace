@@ -1,6 +1,6 @@
 ﻿using CORE.Common.Intefaces;
+using CORE.DAL.Models;
 using CORE.Dto.Dto;
-using DevPace.CORE.DAL.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,15 +10,15 @@ namespace CORE.Common.Mappers
     {
         public CustomerDto Map(Customer source)
         {
-            if(source == null)
+            if (source == null)
             {
                 return null;
             }
 
             return new CustomerDto
             {
-                CustomerId = source.CustomersId,
-                CompanyName = source.CompanyName,
+                CustomerId = source.Customerid,
+                CompanyName = source.Companyname,
                 Name = source.Name,
                 Email = source.Email,
                 Phone = source.Phone
@@ -32,16 +32,16 @@ namespace CORE.Common.Mappers
 
         public Customer ReverseMap(CustomerDto dto)
         {
-            if(dto == null)
+            if (dto == null)
             {
                 return null;
             }
 
             return new Customer
             {
-                CustomersId = dto.CustomerId,
+                Customerid = dto.CustomerId,
                 Name = dto.Name,
-                CompanyName = dto.CompanyName,
+                Companyname = dto.CompanyName,
                 Email = dto.Email,
                 Phone = dto.Phone
             };

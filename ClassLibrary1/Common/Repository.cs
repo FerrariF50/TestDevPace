@@ -11,9 +11,9 @@ namespace CORE.DAL.Common
 {
     public class Repository<DBEntity> : IRepository<DBEntity> where DBEntity : class
     {
-        private readonly DevPaceContext Context;
+        private readonly customersContext Context;
 
-        public Repository(DevPaceContext context)
+        public Repository(customersContext context)
         {
             Context = context;
         }

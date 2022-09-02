@@ -1,21 +1,21 @@
 ﻿using CORE.DAL.Common;
 using CORE.DAL.Context;
 using CORE.DAL.Interfaces;
-using DevPace.CORE.DAL.Models;
+using CORE.DAL.Models;
 using System.Threading.Tasks;
 
 namespace CORE.DAL.Repositories
 {
     public class CustomerRespository : Repository<Customer>, ICustomersRepository
     {
-        public CustomerRespository(DevPaceContext context) : base(context)
+        public CustomerRespository(customersContext context) : base(context)
         {
         }
 
         public async Task<int> AddAsync(Customer obj)
         {
             await Add(obj);
-            return obj.CustomersId;
+            return obj.Customerid;
         }
 
         public async Task DeleteAsync(int id)
@@ -25,8 +25,8 @@ namespace CORE.DAL.Repositories
 
         public async Task<int> UpdateAsync(Customer obj)
         {
-            await UpdateAsync (obj);
-            return obj.CustomersId;
+            await UpdateAsync(obj);
+            return obj.Customerid;
         }
     }
 }
