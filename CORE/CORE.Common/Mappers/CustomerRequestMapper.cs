@@ -1,11 +1,8 @@
 ﻿using CORE.Common.Intefaces;
 using CORE.DAL.Models;
 using CORE.Dto.Requests;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CORE.Common.Mappers
 {

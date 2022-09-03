@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ClassLibrary1\CORE.DAL.csproj" />
+    <ProjectReference Include="..\..\CORE.DAL\CORE.DAL.csproj" />
     <ProjectReference Include="..\..\CORE.Dto\CORE.Dto.csproj" />
   </ItemGroup>
 

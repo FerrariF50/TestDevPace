@@ -2,9 +2,7 @@
 using CORE.DAL.Interfaces;
 using CORE.Dto.Dto;
 using CORE.Dto.Requests;
-using CORE.Dto.Responses;
 using Customer.BAL.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using customer = CORE.DAL.Models.Customer;
