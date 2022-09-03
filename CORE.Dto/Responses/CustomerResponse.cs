@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CORE.Dto.Dto;
 
 namespace CORE.Dto.Responses
 {
-    public class CustomerResponse : BaseRequestResponse<CustomerResponse>
+    public class CustomerResponse : BaseRequestResponse<CustomerDto>
     {
     }
 }

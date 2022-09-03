@@ -1,37 +1,68 @@
-﻿using CORE.Dto.Requests;
+﻿using CORE.Common.Intefaces;
+using CORE.DAL.Interfaces;
+using CORE.Dto.Dto;
+using CORE.Dto.Requests;
 using CORE.Dto.Responses;
 using Customer.BAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using customer = CORE.DAL.Models.Customer;
 
 namespace Customer.BAL.Services
 {
     public class CustomerAppService : ICustomerAppService
     {
-        public Task<int> AddAsync(CustomerRequestDto obj)
+        private readonly IModelMapper<customer, CustomerRequestDto> _customerReqMapper;
+        private readonly IModelMapper<customer, CustomerDto> _customerDtoResMapper;
+        private readonly ICustomersRepository _customerRepository;
+        public CustomerAppService(
+            ICustomersRepository customerRepository,
+            IModelMapper<customer, CustomerRequestDto> customerReqModelMapper, 
+            IModelMapper<customer, CustomerDto> customerDtoResMapper)
         {
-            throw new NotImplementedException();
+            _customerRepository = customerRepository;
+            _customerReqMapper = customerReqModelMapper;
+            _customerDtoResMapper = customerDtoResMapper;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task<int> AddAsync(CustomerRequestDto dto)
         {
-            throw new NotImplementedException();
+            var obj = _customerReqMapper.ReverseMap(dto);
+            obj.Customerid = 0;
+
+            var id = await _customerRepository.AddAsync(obj);
+
+            return id;
         }
 
-        public Task<IEnumerable<CustomerDtoResponse>> GetAllAsync()
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            await _customerRepository.DeleteAsync(id);
         }
 
-        public Task<CustomerResponse> GetAsync(int id)
+        public async Task<IEnumerable<CustomerDto>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var obj = await _customerRepository.GetAllAsync();
+            var dto =_customerDtoResMapper.Map(obj);
+
+            return dto;
         }
 
-        public Task<int> UpdateAsync(CustomerRequestDto obj)
+        public async Task<CustomerDto> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            var obj = await _customerRepository.GetAsync(id);
+            var dto  =_customerDtoResMapper.Map(obj);
+
+            return dto;
+        }
+
+        public async Task<int> UpdateAsync(CustomerRequestDto dto)
+        {
+            var obj = _customerReqMapper.ReverseMap(dto);
+            var id = await _customerRepository.UpdateAsync(obj);
+
+            return id;
         }
     }
 }

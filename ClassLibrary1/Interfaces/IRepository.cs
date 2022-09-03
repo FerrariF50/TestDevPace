@@ -8,11 +8,11 @@ namespace CORE.DAL.Interfaces
     public interface IRepository<DBEntity> where DBEntity : class
     {
         DBEntity Get(int id);
-        IEnumerable<DBEntity> GetAll();
         Task<IEnumerable<DBEntity>> Find(Expression<Func<DBEntity, bool>> predicate);
         Task Add(DBEntity entity);
+        Task Update(DBEntity entity);
         Task AddRange(IEnumerable<DBEntity> entities);
-        Task Remove(DBEntity entity);
+        Task Delete(DBEntity entity);
         Task RemoveRange(IEnumerable<DBEntity> entities);
     }
 }

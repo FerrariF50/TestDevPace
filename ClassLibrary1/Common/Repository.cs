@@ -23,11 +23,6 @@ namespace CORE.DAL.Common
             return Context.Set<DBEntity>().Find(id);
         }
 
-        public IEnumerable<DBEntity> GetAll()
-        {
-            return Context.Set<DBEntity>().ToList();
-        }
-
         public async Task<IEnumerable<DBEntity>> Find(Expression<Func<DBEntity, bool>> predicate)
         {
             return await Context.Set<DBEntity>().Where(predicate).ToListAsync();
@@ -39,13 +34,19 @@ namespace CORE.DAL.Common
             await Context.SaveChangesAsync();
         }
 
+        public async Task Update(DBEntity entity)
+        {
+            Context.Set<DBEntity>().Update(entity);
+            await Context.SaveChangesAsync();
+        }
+
         public async Task AddRange(IEnumerable<DBEntity> entities)
         {
             await Context.Set<DBEntity>().AddRangeAsync(entities);
             await Context.SaveChangesAsync();
         }
 
-        public async Task Remove(DBEntity entity)
+        public async Task Delete(DBEntity entity)
         {
             Context.Set<DBEntity>().Remove(entity);
             await Context.SaveChangesAsync();

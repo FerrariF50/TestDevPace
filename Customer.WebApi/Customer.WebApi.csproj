@@ -23,6 +23,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\ClassLibrary1\CORE.DAL.csproj" />
 	  <ProjectReference Include="..\CORE.Dto\CORE.Dto.csproj" />
+	  <ProjectReference Include="..\CORE\CORE.Common\CORE.Common.csproj" />
 	  <ProjectReference Include="..\DevPace.BAL\Customer.BAL.csproj" />
 	</ItemGroup>
 

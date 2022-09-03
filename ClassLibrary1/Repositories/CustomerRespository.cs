@@ -2,14 +2,20 @@
 using CORE.DAL.Context;
 using CORE.DAL.Interfaces;
 using CORE.DAL.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CORE.DAL.Repositories
 {
     public class CustomerRespository : Repository<Customer>, ICustomersRepository
     {
+        private readonly customersContext Context;
+
         public CustomerRespository(customersContext context) : base(context)
         {
+            Context = context;
         }
 
         public async Task<int> AddAsync(Customer obj)
@@ -20,13 +26,31 @@ namespace CORE.DAL.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            await DeleteAsync(id);
+            Context.RemoveRange(Context.Customers.Where(x => x.Customerid == id));
+            await Context.SaveChangesAsync();
         }
 
         public async Task<int> UpdateAsync(Customer obj)
         {
-            await UpdateAsync(obj);
+            await Update(obj);
             return obj.Customerid;
+        }
+
+        public async Task<IEnumerable<Customer>> GetAllAsync()
+        {
+            return await Context.Customers
+                .OrderBy(x => x.Customerid)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<Customer> GetAsync(int id)
+        {
+            return await Context.Customers
+                .OrderBy(x => x.Customerid)
+                .Where(x => x.Customerid == id)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
     }
 }

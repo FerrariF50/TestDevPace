@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CORE.Common.Mappers
 {
-    public class CustomerMappers : IModelMapper<Customer, CustomerDto>
+    public class CustomerMapper : IModelMapper<Customer, CustomerDto>
     {
         public CustomerDto Map(Customer source)
         {

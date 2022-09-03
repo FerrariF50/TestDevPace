@@ -4,8 +4,6 @@ using Customer.BAL.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Customer.WebApi.Controllers
@@ -40,7 +38,7 @@ namespace Customer.WebApi.Controllers
             }
         }
 
-        [HttpGet("[Action]/{customerId}")]
+        [HttpGet("[Action]")]
         [ProducesResponseType(typeof(CustomerDtoResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(CustomerDtoResponse), StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
