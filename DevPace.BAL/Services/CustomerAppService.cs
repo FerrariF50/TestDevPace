@@ -3,6 +3,7 @@ using CORE.DAL.Interfaces;
 using CORE.Dto.Dto;
 using CORE.Dto.Requests;
 using Customer.BAL.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using customer = CORE.DAL.Models.Customer;
@@ -14,14 +15,18 @@ namespace Customer.BAL.Services
         private readonly IModelMapper<customer, CustomerRequestDto> _customerReqMapper;
         private readonly IModelMapper<customer, CustomerDto> _customerDtoResMapper;
         private readonly ICustomersRepository _customerRepository;
+        private readonly IVerifyEmailAppService _verifyAppSrv;
+
         public CustomerAppService(
             ICustomersRepository customerRepository,
-            IModelMapper<customer, CustomerRequestDto> customerReqModelMapper, 
-            IModelMapper<customer, CustomerDto> customerDtoResMapper)
+            IModelMapper<customer, CustomerRequestDto> customerReqModelMapper,
+            IModelMapper<customer, CustomerDto> customerDtoResMapper, 
+            IVerifyEmailAppService verifyAppSrv)
         {
-            _customerRepository = customerRepository;
-            _customerReqMapper = customerReqModelMapper;
-            _customerDtoResMapper = customerDtoResMapper;
+            this._customerRepository = customerRepository;
+            this._customerReqMapper = customerReqModelMapper;
+            this._customerDtoResMapper = customerDtoResMapper;
+            this._verifyAppSrv = verifyAppSrv;
         }
 
         public async Task<int> AddAsync(CustomerRequestDto dto)
@@ -29,9 +34,13 @@ namespace Customer.BAL.Services
             var obj = _customerReqMapper.ReverseMap(dto);
             obj.Customerid = 0;
 
-            var id = await _customerRepository.AddAsync(obj);
+            if (_verifyAppSrv.IsValidEmail(obj.Email))
+            {
+                var id = await _customerRepository.AddAsync(obj);
+                return id;
+            }
 
-            return id;
+            throw new Exception("Email is not valid");
         }
 
         public async Task DeleteAsync(int id)

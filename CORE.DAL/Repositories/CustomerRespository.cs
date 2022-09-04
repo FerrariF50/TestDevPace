@@ -3,7 +3,9 @@ using CORE.DAL.Context;
 using CORE.DAL.Interfaces;
 using CORE.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,9 +13,9 @@ namespace CORE.DAL.Repositories
 {
     public class CustomerRespository : Repository<Customer>, ICustomersRepository
     {
-        private readonly customersContext Context;
+        private readonly customerContext Context;
 
-        public CustomerRespository(customersContext context) : base(context)
+        public CustomerRespository(customerContext context) : base(context)
         {
             Context = context;
         }

@@ -29,12 +29,13 @@ namespace Customer.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IVerifyEmailAppService, VerifyEmailAppService>();
             services.AddScoped<ICustomerAppService, CustomerAppService>();
             services.AddScoped<ICustomersRepository, CustomerRespository>();
             services.AddScoped<IModelMapper<customer, CustomerDto>, CustomerMapper>();
             services.AddScoped<IModelMapper<customer, CustomerRequestDto>, CustomerRequestMapper>();
-
-            services.AddDbContext<customersContext>(options =>
+            
+            services.AddDbContext<customerContext>(options =>
             {
                 options.UseNpgsql(Configuration.GetConnectionString("CustomerConnectionString"));
             });
