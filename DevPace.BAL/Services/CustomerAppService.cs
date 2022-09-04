@@ -67,9 +67,12 @@ namespace Customer.BAL.Services
         public async Task<int> UpdateAsync(CustomerRequestDto dto)
         {
             var obj = _customerReqMapper.ReverseMap(dto);
-            var id = await _customerRepository.UpdateAsync(obj);
-
-            return id;
+            if (_verifyAppSrv.IsValidEmail(obj.Email))
+            {
+                var id = await _customerRepository.UpdateAsync(obj);
+                return id;
+            }
+            throw new Exception("Email is not valid");
         }
     }
 }
